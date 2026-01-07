@@ -1,57 +1,29 @@
-name: Flutter CI/CD
+name: Flutter CI
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
+  pull_request:
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: 'stable'
+          flutter-version: '3.35.6'
+          channel: 'stable'
 
-      - name: Install dependencies
+      - name: Flutter pub get
         run: flutter pub get
 
-      - name: Analyze code
+      - name: Run analyzer
         run: flutter analyze
 
       - name: Run tests
         run: flutter test
-
-      # -------------------------
-      # ANDROID AAB BUILD
-      # -------------------------
-      - name: Build Android App Bundle (AAB)
-        run: flutter build appbundle
-
-      - name: Upload AAB artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-release-aab
-          path: build/app/outputs/bundle/release/app-release.aab
-
-      # -------------------------
-      # FLUTTER WEB BUILD
-      # -------------------------
-      - name: Build Flutter Web
-        run: flutter build web --release
-
-      # -------------------------
-      # FIREBASE DEPLOY
-      # -------------------------
-      - name: Deploy to Firebase Hosting
-        uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
-          channelId: live
-          projectId: your-firebase-project-id
