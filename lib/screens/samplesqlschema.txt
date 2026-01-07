@@ -1,0 +1,6 @@
+INSERT INTO idioms (phrase, meaning) VALUES
+('Akili ilikuwa mbali,ulioniona wapi?', 'Tukipatana kwa barabara alafu uone sijakuangalia, wewe jua milikuona wa kwanza na nikaangalia mbele ndio nikulenge.'),
+('Can never be me!', 'This phrase is full of jinx! Once you say it loud, life then says "haya! We''ll take it from here!" My friend the way it will be you, utadhani umerogwa! It can even happen twice or thrice just to prove to you that the first time wasn''t a mistake');
+
+INSERT INTO words (name, meaning) VALUES
+('Freelancer', 'Huyu ni mtu huezi elewa vile huwa anapata pesa. Leo anaeza kuwa amesota hadi akuombe za kabej na kesho umuone ako Zanzibar akiswim na turtles.');
