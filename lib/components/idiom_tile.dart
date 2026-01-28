@@ -1,4 +1,5 @@
 // 
+
 import 'package:flutter/material.dart';
 import 'package:kenyandictionaryapp/models/idiom.dart';
 
@@ -13,18 +14,26 @@ class IdiomTile extends StatelessWidget {
     return Card(
       elevation: 2,
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         title: Text(
           idiom.phrase,
-          style: const TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
         ),
-        subtitle: Text(idiom.meaning),
+        subtitle: Text(
+          idiom.meaning,
+          style: const TextStyle(fontSize: 14),
+        ),
         trailing: IconButton(
           icon: Icon(
             idiom.isBookmarked ? Icons.bookmark : Icons.bookmark_border,
-            color: idiom.isBookmarked ? Colors.blueAccent : Colors.grey,
+            color: idiom.isBookmarked ? Colors.amberAccent : Colors.grey,
           ),
-          onPressed: onBookmarkToggle, // Delegate to parent widget
+          onPressed: onBookmarkToggle, // calls parent screen callback
         ),
       ),
     );

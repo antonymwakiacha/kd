@@ -1,7 +1,20 @@
+// 
+import 'package:hive/hive.dart';
+
+part 'idiom.g.dart';
+
+@HiveType(typeId: 1)
 class Idiom {
+  @HiveField(0)
   final int id;
+
+  @HiveField(1)
   final String phrase;
+
+  @HiveField(2)
   final String meaning;
+
+  @HiveField(3)
   bool isBookmarked;
 
   Idiom({
@@ -20,13 +33,10 @@ class Idiom {
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'phrase': phrase,
-      'meaning': meaning,
-      'is_bookmarked': isBookmarked,
-    };
-  }
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'phrase': phrase,
+        'meaning': meaning,
+        'is_bookmarked': isBookmarked,
+      };
 }
-

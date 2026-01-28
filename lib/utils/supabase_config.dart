@@ -1,54 +1,31 @@
-
-
-// import 'package:supabase_flutter/supabase_flutter.dart';
-// import 'package:flutter_dotenv/flutter_dotenv.dart';
-
-
-// class SupabaseConfig {
-//   //static const String supabaseUrl = 'https://otqamrtrquhbymzodxki.supabase.co';
-//  // static const String supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im90cWFtcnRycXVoYnltem9keGtpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcyNDk1MDUsImV4cCI6MjA3MjgyNTUwNX0.heRUQWeZg28HPhPbHKT2VajHHRSSMyGm1sku4qN4HyA';
-  
-//   static final String supabaseUrl = dotenv.env['SUPABASE_URL']!;
-//   static final String supabaseAnonKey = dotenv.env['SUPABASE_ANON_KEY']!;
-
-//   static Future<void> initialize() async {
-//     await Supabase.initialize(
-//       url: supabaseUrl,
-//       anonKey: supabaseAnonKey,
-//     );
-//   }
-  
-//   static SupabaseClient get client => Supabase.instance.client;
-// }
-
-
+import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class SupabaseConfig {
-  static late final String _supabaseUrl;
-  static late final String _supabaseAnonKey;
+  static late final SupabaseClient client;
+  static late final String url;
+  static late final String anonKey;
 
-  /// Initialize Supabase
-  /// If keys are passed -> production
-  /// Else load from .env.dev -> development
-  static Future<void> initialize({String? supabaseUrl, String? supabaseAnonKey}) async {
-    if (supabaseUrl != null && supabaseAnonKey != null) {
-      _supabaseUrl = supabaseUrl;
-      _supabaseAnonKey = supabaseAnonKey;
-    } else {
-      await dotenv.load(fileName: ".env.dev");
-      _supabaseUrl = dotenv.env['SUPABASE_URL']!;
-      _supabaseAnonKey = dotenv.env['SUPABASE_ANON_KEY']!;
-    }
+  /// Initialize Supabase with URL and anon key
+  static Future<void> initialize({
+    required String supabaseUrl,
+    required String supabaseAnonKey,
+  }) async {
+    url = supabaseUrl;
+    anonKey = supabaseAnonKey;
+
+    // Debug prints
+    debugPrint('Initializing Supabase with:');
+    debugPrint('URL: $url');
+    debugPrint('AnonKey length: ${anonKey.length}');
 
     await Supabase.initialize(
-      url: _supabaseUrl,
-      anonKey: _supabaseAnonKey,
+      url: url,
+      anonKey: anonKey,
+      debug: true, // Turn on logging for testing
     );
-  }
 
-  static SupabaseClient get client => Supabase.instance.client;
-  static String get url => _supabaseUrl;
-  static String get anonKey => _supabaseAnonKey;
+    client = Supabase.instance.client;
+  }
 }
+
