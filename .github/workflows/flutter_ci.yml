@@ -1,45 +1,100 @@
-name: Flutter CI
+# name: Flutter CI
+
+# on:
+#   push:
+#     branches: [ main ]
+#   pull_request:
+#     branches: [ main ]
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       # 1️⃣ Checkout repository
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+
+#       # 2️⃣ Setup Flutter
+#       - name: Set up Flutter
+#         uses: subosito/flutter-action@v2
+#         with:
+#           flutter-version: '3.35.6'
+#           channel: stable
+#           cache: true
+
+#       # 3️⃣ Install dependencies
+#       - name: Install dependencies
+#         run: flutter pub get
+
+#       # 4️⃣ Generate Envied + Hive adapters
+#       - name: Run code generation
+#         run: |
+#           flutter pub run build_runner build --delete-conflicting-outputs
+
+#       # 5️⃣ Analyze (do NOT fail build on warnings)
+#       - name: Flutter analyze
+#         run: flutter analyze --no-fatal-infos --no-fatal-warnings
+
+#       # 6️⃣ Run tests (optional, safe)
+#       - name: Run tests
+#         run: flutter test || echo "No tests found"
+
+#       # 7️⃣ Build Flutter Web (critical for hosting)
+#       - name: Build Flutter Web
+#         run: flutter build web --release
+
+
+name: Flutter Web CI & Firebase Deploy
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout repository
-      - name: Checkout code
+      # 1️⃣ Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2️⃣ Setup Flutter
+      # 2️⃣ Set up Flutter
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.35.6'
           channel: stable
-          cache: true
 
       # 3️⃣ Install dependencies
-      - name: Install dependencies
+      - name: Flutter pub get
         run: flutter pub get
 
-      # 4️⃣ Generate Envied + Hive adapters
-      - name: Run code generation
-        run: |
-          flutter pub run build_runner build --delete-conflicting-outputs
+      # 4️⃣ Generate Envied files (IMPORTANT)
+      - name: Run build_runner
+        run: flutter pub run build_runner build --delete-conflicting-outputs
 
-      # 5️⃣ Analyze (do NOT fail build on warnings)
+      # 5️⃣ Analyze (optional but recommended)
       - name: Flutter analyze
-        run: flutter analyze --no-fatal-infos --no-fatal-warnings
+        run: flutter analyze
 
-      # 6️⃣ Run tests (optional, safe)
-      - name: Run tests
-        run: flutter test || echo "No tests found"
-
-      # 7️⃣ Build Flutter Web (critical for hosting)
+      # 6️⃣ Build Flutter Web
       - name: Build Flutter Web
         run: flutter build web --release
+
+      # 7️⃣ Authenticate to Firebase using service account
+      - name: Firebase Auth
+        run: |
+          echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > $HOME/firebase-key.json
+          echo "GOOGLE_APPLICATION_CREDENTIALS=$HOME/firebase-key.json" >> $GITHUB_ENV
+
+      # 8️⃣ Deploy to Firebase Hosting
+      - name: Deploy to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          channelId: live
+          projectId: kenyadictionarydb
