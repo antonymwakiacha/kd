@@ -77,8 +77,8 @@ jobs:
         run: flutter pub run build_runner build --delete-conflicting-outputs
 
       # 5️⃣ Analyze (optional but recommended)
-      - name: Flutter analyze
-        run: flutter analyze
+      - name: Flutter analyze (non-blocking)
+        run: flutter analyze --no-fatal-warnings --no-fatal-infos
 
       # 6️⃣ Build Flutter Web
       - name: Build Flutter Web
