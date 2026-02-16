@@ -16,7 +16,7 @@
 
 ## 🎬 Access the App
 
-* **Web App:** [Open in Browser](https://kenyandictionaryapp-7ef26.web.app/)
+* **Web App:** [Open in Browser](https://https://kenyadictionarydb.web.app/)
 * **View the app demo:** [Watch Demo](https://drive.google.com/file/d/11CCCVQ_3rRnM3pLHzHy5e7P_7Z0LvpAr/view?usp=sharing)
 * **Download the APK:** [Get APK](https://github.com/antonymwakiacha/kenyandictionaryapp/raw/main/apk/KenyanDictionaryApp.apk)
 
